@@ -66,6 +66,19 @@ Frontend runs on: `http://localhost:5173`
 ### Check-ins
 - `GET /api/checkin/clients` - Get assigned clients
 - `POST /api/checkin` - Create check-in
+  
+  **API Update: Check-in Endpoint Refactoring**
+  
+  We have enhanced the check-in capability to support real-time location validation. This ensures better compliance by verifying the employee's proximity to the client.
+
+  | Feature | Previous Implementation | Current Implementation |
+  | :--- | :--- | :--- |
+  | **Request Body** | `{ client_id, notes }` | `{ client_id, latitude, longitude, notes }` |
+  | **Validation** | Basic existence check of Client ID. | Validates GPS coordinates and calculates distance. |
+  | **Response** | Simple success message. | Returns calculated `distance_from_client` (km) and optional warning if > 0.5km. |
+  | **Data Storage** | Captured time and status. | Now also persists `distance_from_client` for audit trails. |
+
+  *Note: The system triggers a warning "You are far from the client location" if the distance exceeds 500 meters, but currently still allows the check-in to proceed.*
 - `PUT /api/checkin/checkout` - Checkout
 - `GET /api/checkin/history` - Get check-in history
 - `GET /api/checkin/active` - Get active check-in
@@ -94,4 +107,10 @@ Frontend runs on: `http://localhost:5173`
 ### Data Integrity & Localization
 - Timezone: Dashboard now strictly uses Indian Standard Time (IST) for "Today" calculations, ensuring accurate reporting for the local workforce.
 - Location: Removed hardcoded fallback coordinates. The app now enforces ensuring real GPS data is available before check-in.
+
+### User Experience & Performance
+- Session Management: Switched from `localStorage` to `sessionStorage` to allow multiple users to log in on different tabs without session conflict.
+- Performance: Memoized heavy calculations on the History page to prevent UI freezing.
+- Error Handling: Corrected API status codes (200 -> 400) for better frontend error handling.
+- Usability: Made login email case-insensitive.
 

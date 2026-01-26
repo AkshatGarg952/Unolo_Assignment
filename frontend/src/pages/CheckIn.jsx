@@ -12,10 +12,43 @@ function CheckIn({ user }) {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
+    const [distance, setDistance] = useState(null);
+
     useEffect(() => {
         fetchData();
         getCurrentLocation();
     }, []);
+
+    // Calculate distance when client or location changes
+    useEffect(() => {
+        if (selectedClient && location && clients.length > 0) {
+            const client = clients.find(c => c.id == selectedClient);
+            if (client && client.latitude && client.longitude) {
+                const dist = calculateDistance(
+                    location.latitude,
+                    location.longitude,
+                    client.latitude,
+                    client.longitude
+                );
+                setDistance(dist);
+            }
+        } else {
+            setDistance(null);
+        }
+    }, [selectedClient, location, clients]);
+
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+        const R = 6371; // Radius of the earth in km
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const d = R * c;
+        return parseFloat(d.toFixed(2));
+    };
 
     const fetchData = async () => {
         try {
@@ -60,6 +93,7 @@ function CheckIn({ user }) {
     };
 
     const handleCheckIn = async (e) => {
+        e.preventDefault();
         setError('');
         setSuccess('');
         setSubmitting(true);
@@ -73,7 +107,11 @@ function CheckIn({ user }) {
             });
 
             if (response.data.success) {
-                setSuccess('Checked in successfully!');
+                let msg = 'Checked in successfully!';
+                if (response.data.data.warning) {
+                    msg += ` Note: ${response.data.data.warning}`;
+                }
+                setSuccess(msg);
                 setSelectedClient('');
                 setNotes('');
                 fetchData(); // Refresh data
@@ -127,7 +165,10 @@ function CheckIn({ user }) {
             )}
 
             {success && (
-                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                <div className={`border px-4 py-3 rounded mb-4 ${success.includes('Note:')
+                    ? 'bg-yellow-100 border-yellow-400 text-yellow-700'
+                    : 'bg-green-100 border-green-400 text-green-700'
+                    }`}>
                     {success}
                 </div>
             )}
@@ -188,6 +229,22 @@ function CheckIn({ user }) {
                                 ))}
                             </select>
                         </div>
+
+                        {/* Distance Display */}
+                        {distance !== null && (
+                            <div className={`mb-4 p-3 rounded-md ${distance > 0.5 ? 'bg-yellow-50 text-yellow-800 border border-yellow-200' : 'bg-blue-50 text-blue-800 border border-blue-200'
+                                }`}>
+                                <div className="flex items-center gap-2">
+                                    <span className="font-medium">Distance from client:</span>
+                                    <span>{distance} km</span>
+                                </div>
+                                {distance > 0.5 && (
+                                    <div className="text-sm mt-1 text-yellow-700">
+                                        ⚠️ You are far from the client location
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-medium mb-2">

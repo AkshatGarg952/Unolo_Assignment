@@ -26,18 +26,13 @@ router.post('/', authenticateToken, async (req, res) => {
     try {
         const { client_id, latitude, longitude, notes } = req.body;
 
-        // BUG 3.3: Fixed Incorrect API Status Code
-        // Incorrect Code (Returning 200 for error):
-        // return res.status(200).json({ success: false, message: 'Client ID is required' });
-
-        // Correct Code: Return 400 Bad Request
         if (!client_id) {
             return res.status(400).json({ success: false, message: 'Client ID is required' });
         }
 
         // Check if employee is assigned to this client
         const [assignments] = await pool.execute(
-            'SELECT * FROM employee_clients WHERE employee_id = ? AND client_id = ?',
+            'SELECT c.* FROM clients c INNER JOIN employee_clients ec ON c.id = ec.client_id WHERE ec.employee_id = ? AND ec.client_id = ?',
             [req.user.id, client_id]
         );
 
@@ -45,15 +40,9 @@ router.post('/', authenticateToken, async (req, res) => {
             return res.status(403).json({ success: false, message: 'You are not assigned to this client' });
         }
 
-        // Check for existing active check-in
-        // BUG 1.2: Fixed SQL Syntax Error (Double Quotes)
-        // Incorrect Code (Double quotes used for string literal):
-        // const [activeCheckins] = await pool.execute(
-        //     'SELECT * FROM checkins WHERE employee_id = ? AND status = "checked_in"',
-        //     [req.user.id]
-        // );
+        const client = assignments[0];
 
-        // Correct Code: Used single quotes for 'checked_in'
+        // Check for existing active check-in
         const [activeCheckins] = await pool.execute(
             'SELECT * FROM checkins WHERE employee_id = ? AND status = \'checked_in\'',
             [req.user.id]
@@ -66,26 +55,38 @@ router.post('/', authenticateToken, async (req, res) => {
             });
         }
 
-        // BUG 1.1: Fixed Schema Mismatch
-        // Incorrect Code (lat/lng columns don't exist):
-        // const [result] = await pool.execute(
-        //     `INSERT INTO checkins (employee_id, client_id, lat, lng, notes, status)
-        //      VALUES (?, ?, ?, ?, ?, 'checked_in')`,
-        //     [req.user.id, client_id, latitude, longitude, notes || null]
-        // );
+        // Calculate Distance
+        let distanceFromClient = 0;
+        let warning = null;
 
-        // Correct Code: Using correct column names latitude/longitude
+        if (latitude && longitude && client.lat && client.lng) {
+            distanceFromClient = calculateDistance(
+                parseFloat(latitude),
+                parseFloat(longitude),
+                parseFloat(client.lat),
+                parseFloat(client.lng)
+            );
+
+            // Warning if > 500m (0.5 km)
+            if (distanceFromClient > 0.5) {
+                warning = "You are far from the client location";
+            }
+        }
+
+        // Insert Check-in
         const [result] = await pool.execute(
-            `INSERT INTO checkins (employee_id, client_id, latitude, longitude, notes, status)
-             VALUES (?, ?, ?, ?, ?, 'checked_in')`,
-            [req.user.id, client_id, latitude, longitude, notes || null]
+            `INSERT INTO checkins (employee_id, client_id, latitude, longitude, notes, status, distance_from_client)
+             VALUES (?, ?, ?, ?, ?, 'checked_in', ?)`,
+            [req.user.id, client_id, latitude, longitude, notes || null, distanceFromClient]
         );
 
         res.status(201).json({
             success: true,
             data: {
                 id: result.insertId,
-                message: 'Checked in successfully'
+                message: 'Checked in successfully',
+                distance_from_client: distanceFromClient,
+                warning: warning
             }
         });
     } catch (error) {
@@ -93,6 +94,23 @@ router.post('/', authenticateToken, async (req, res) => {
         res.status(500).json({ success: false, message: 'Check-in failed' });
     }
 });
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return parseFloat(d.toFixed(2));
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
 
 // Checkout from current location
 router.put('/checkout', authenticateToken, async (req, res) => {
