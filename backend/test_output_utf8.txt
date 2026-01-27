@@ -1,0 +1,383 @@
+﻿npx : FAIL 
+tests/reports.test.js
+At line:1 char:1
++ npx jest tests/repo
+rts.test.js > 
+test_output.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (FAIL te   
+ sts/reports.test    
+.js:String) [],     
+RemoteException
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  ΓùÅ Daily Summary 
+Report API ΓÇ║ 
+should return 400 if 
+date is missing
+
+    EBUSY: resource 
+busy or locked, 
+unlink 'C:\Users\garg
+a\OneDrive\Desktop\Un
+olo\starter-code\back
+end\tests\test.sqlite
+'
+
+    [0m [90m 32 
+|[39m     
+beforeAll(() 
+[33m=>[39m {
+     [90m 33 |[39m 
+        [90m// 
+Initialize DB 
+schema[39m
+    [31m[1m>[22m[
+39m[90m 34 |[39m   
+      [36mif[39m (f
+s[33m.[39mexistsSyn
+c([33mTEST_DB[39m))
+ fs[33m.[39munlinkS
+ync([33mTEST_DB[39m
+)[33m;[39m
+     [90m    |[39m 
+                     
+                  
+[31m[1m^[22m[39m
+     [90m 35 |[39m 
+        db 
+[33m=[39m 
+[36mnew[39m [33mDa
+tabase[39m([33mTEST
+_DB[39m)[33m;[39m
+     [90m 36 |[39m 
+        db[33m.[39m
+exec([32m`[39m
+     [90m 37 |[39m 
+[32m            
+CREATE TABLE users 
+([39m[0m
+
+      at 
+Object.unlinkSync (te
+sts/reports.test.js:3
+4:40)
+
+  ΓùÅ Daily Summary 
+Report API ΓÇ║ 
+should return 400 if 
+date format is 
+invalid
+
+    EBUSY: resource 
+busy or locked, 
+unlink 'C:\Users\garg
+a\OneDrive\Desktop\Un
+olo\starter-code\back
+end\tests\test.sqlite
+'
+
+    [0m [90m 32 
+|[39m     
+beforeAll(() 
+[33m=>[39m {
+     [90m 33 |[39m 
+        [90m// 
+Initialize DB 
+schema[39m
+    [31m[1m>[22m[
+39m[90m 34 |[39m   
+      [36mif[39m (f
+s[33m.[39mexistsSyn
+c([33mTEST_DB[39m))
+ fs[33m.[39munlinkS
+ync([33mTEST_DB[39m
+)[33m;[39m
+     [90m    |[39m 
+                     
+                  
+[31m[1m^[22m[39m
+     [90m 35 |[39m 
+        db 
+[33m=[39m 
+[36mnew[39m [33mDa
+tabase[39m([33mTEST
+_DB[39m)[33m;[39m
+     [90m 36 |[39m 
+        db[33m.[39m
+exec([32m`[39m
+     [90m 37 |[39m 
+[32m            
+CREATE TABLE users 
+([39m[0m
+
+      at 
+Object.unlinkSync (te
+sts/reports.test.js:3
+4:40)
+
+  ΓùÅ Daily Summary 
+Report API ΓÇ║ 
+should return empty 
+stats if no checkins 
+found
+
+    EBUSY: resource 
+busy or locked, 
+unlink 'C:\Users\garg
+a\OneDrive\Desktop\Un
+olo\starter-code\back
+end\tests\test.sqlite
+'
+
+    [0m [90m 32 
+|[39m     
+beforeAll(() 
+[33m=>[39m {
+     [90m 33 |[39m 
+        [90m// 
+Initialize DB 
+schema[39m
+    [31m[1m>[22m[
+39m[90m 34 |[39m   
+      [36mif[39m (f
+s[33m.[39mexistsSyn
+c([33mTEST_DB[39m))
+ fs[33m.[39munlinkS
+ync([33mTEST_DB[39m
+)[33m;[39m
+     [90m    |[39m 
+                     
+                  
+[31m[1m^[22m[39m
+     [90m 35 |[39m 
+        db 
+[33m=[39m 
+[36mnew[39m [33mDa
+tabase[39m([33mTEST
+_DB[39m)[33m;[39m
+     [90m 36 |[39m 
+        db[33m.[39m
+exec([32m`[39m
+     [90m 37 |[39m 
+[32m            
+CREATE TABLE users 
+([39m[0m
+
+      at 
+Object.unlinkSync (te
+sts/reports.test.js:3
+4:40)
+
+  ΓùÅ Daily Summary 
+Report API ΓÇ║ 
+should correctly 
+aggregate stats for 
+a date
+
+    EBUSY: resource 
+busy or locked, 
+unlink 'C:\Users\garg
+a\OneDrive\Desktop\Un
+olo\starter-code\back
+end\tests\test.sqlite
+'
+
+    [0m [90m 32 
+|[39m     
+beforeAll(() 
+[33m=>[39m {
+     [90m 33 |[39m 
+        [90m// 
+Initialize DB 
+schema[39m
+    [31m[1m>[22m[
+39m[90m 34 |[39m   
+      [36mif[39m (f
+s[33m.[39mexistsSyn
+c([33mTEST_DB[39m))
+ fs[33m.[39munlinkS
+ync([33mTEST_DB[39m
+)[33m;[39m
+     [90m    |[39m 
+                     
+                  
+[31m[1m^[22m[39m
+     [90m 35 |[39m 
+        db 
+[33m=[39m 
+[36mnew[39m [33mDa
+tabase[39m([33mTEST
+_DB[39m)[33m;[39m
+     [90m 36 |[39m 
+        db[33m.[39m
+exec([32m`[39m
+     [90m 37 |[39m 
+[32m            
+CREATE TABLE users 
+([39m[0m
+
+      at 
+Object.unlinkSync (te
+sts/reports.test.js:3
+4:40)
+
+  ΓùÅ Daily Summary 
+Report API ΓÇ║ 
+should filter by 
+employee_id
+
+    EBUSY: resource 
+busy or locked, 
+unlink 'C:\Users\garg
+a\OneDrive\Desktop\Un
+olo\starter-code\back
+end\tests\test.sqlite
+'
+
+    [0m [90m 32 
+|[39m     
+beforeAll(() 
+[33m=>[39m {
+     [90m 33 |[39m 
+        [90m// 
+Initialize DB 
+schema[39m
+    [31m[1m>[22m[
+39m[90m 34 |[39m   
+      [36mif[39m (f
+s[33m.[39mexistsSyn
+c([33mTEST_DB[39m))
+ fs[33m.[39munlinkS
+ync([33mTEST_DB[39m
+)[33m;[39m
+     [90m    |[39m 
+                     
+                  
+[31m[1m^[22m[39m
+     [90m 35 |[39m 
+        db 
+[33m=[39m 
+[36mnew[39m [33mDa
+tabase[39m([33mTEST
+_DB[39m)[33m;[39m
+     [90m 36 |[39m 
+        db[33m.[39m
+exec([32m`[39m
+     [90m 37 |[39m 
+[32m            
+CREATE TABLE users 
+([39m[0m
+
+      at 
+Object.unlinkSync (te
+sts/reports.test.js:3
+4:40)
+
+  ΓùÅ Daily Summary 
+Report API ΓÇ║ 
+should deny access 
+to non-managers
+
+    EBUSY: resource 
+busy or locked, 
+unlink 'C:\Users\garg
+a\OneDrive\Desktop\Un
+olo\starter-code\back
+end\tests\test.sqlite
+'
+
+    [0m [90m 32 
+|[39m     
+beforeAll(() 
+[33m=>[39m {
+     [90m 33 |[39m 
+        [90m// 
+Initialize DB 
+schema[39m
+    [31m[1m>[22m[
+39m[90m 34 |[39m   
+      [36mif[39m (f
+s[33m.[39mexistsSyn
+c([33mTEST_DB[39m))
+ fs[33m.[39munlinkS
+ync([33mTEST_DB[39m
+)[33m;[39m
+     [90m    |[39m 
+                     
+                  
+[31m[1m^[22m[39m
+     [90m 35 |[39m 
+        db 
+[33m=[39m 
+[36mnew[39m [33mDa
+tabase[39m([33mTEST
+_DB[39m)[33m;[39m
+     [90m 36 |[39m 
+        db[33m.[39m
+exec([32m`[39m
+     [90m 37 |[39m 
+[32m            
+CREATE TABLE users 
+([39m[0m
+
+      at 
+Object.unlinkSync (te
+sts/reports.test.js:3
+4:40)
+
+
+  ΓùÅ Test suite 
+failed to run
+
+    TypeError: 
+Cannot read 
+properties of 
+undefined (reading 
+'close')
+
+    [0m [90m 66 
+|[39m
+     [90m 67 |[39m 
+    afterAll(() 
+[33m=>[39m {
+    [31m[1m>[22m[
+39m[90m 68 |[39m   
+      db[33m.[39mcl
+ose()[33m;[39m
+     [90m    |[39m 
+           
+[31m[1m^[22m[39m
+     [90m 69 |[39m 
+        [36mif[39m 
+(fs[33m.[39mexistsS
+ync([33mTEST_DB[39m
+)) {
+     [90m 70 |[39m 
+            fs[33m.
+[39munlinkSync([33mT
+EST_DB[39m)[33m;[3
+9m
+     [90m 71 |[39m 
+        }[0m
+
+      at 
+Object.close (tests/r
+eports.test.js:68:12)
+
+Test Suites: 1 
+failed, 1 total
+Tests:       6 
+failed, 6 total
+Snapshots:   0 total
+Time:        0.974 
+s, estimated 1 s
+Ran all test suites 
+matching tests/report
+s.test.js.

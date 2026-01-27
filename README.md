@@ -15,6 +15,7 @@ A web application for tracking field employee check-ins at client locations.
 ```bash
 cd backend
 npm run setup    # Installs dependencies and initializes database
+npm test         # Run unit tests
 cp .env.example .env
 npm run dev
 ```
@@ -87,6 +88,36 @@ Frontend runs on: `http://localhost:5173`
 - `GET /api/dashboard/stats` - Manager stats
 - `GET /api/dashboard/employee` - Employee stats
 
+### Reports
+- `GET /api/reports/daily-summary` - Daily Summary Report (Manager only)
+  - **Query Params**:
+    - `date`: YYYY-MM-DD (required)
+    - `employee_id`: integer (optional)
+  - **Response Example**:
+    ```json
+    {
+      "success": true,
+      "data": {
+        "date": "2024-01-27",
+        "team_summary": {
+          "total_checkins": 10,
+          "total_hours": 35.5,
+          "active_employees": 2,
+          "total_unique_clients": 5
+        },
+        "employee_breakdown": [
+          {
+            "employee_id": 2,
+            "employee_name": "John",
+            "total_checkins": 5,
+            "clients_visited_count": 3,
+            "total_hours": 7.5
+          }
+        ]
+      }
+    }
+    ```
+
 ## Notes
 
 - The database uses SQLite - no external database setup required
@@ -113,4 +144,9 @@ Frontend runs on: `http://localhost:5173`
 - Performance: Memoized heavy calculations on the History page to prevent UI freezing.
 - Error Handling: Corrected API status codes (200 -> 400) for better frontend error handling.
 - Usability: Made login email case-insensitive.
+
+### Reporting Architecture
+- **Aggregation Strategy**: The daily summary report calculates working hours by summing the duration of completed check-ins (checkout - checkin).
+- **Team Stats**: Unique client counts are aggregated using a distinct query to ensure accuracy at the team level (avoiding double-counting if two employees visit the same client).
+- **Timezone**: Consistent with the dashboard, reports use IST (+05:30) for filtering daily records.
 
