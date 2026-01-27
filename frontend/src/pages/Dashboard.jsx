@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 function Dashboard({ user }) {
     const [stats, setStats] = useState(null);
@@ -14,7 +15,7 @@ function Dashboard({ user }) {
         try {
             const endpoint = user.id === 1 ? '/dashboard/stats' : '/dashboard/employee';
             const response = await api.get(endpoint);
-            
+
             if (response.data.success) {
                 setStats(response.data.data);
             }
@@ -47,7 +48,7 @@ function Dashboard({ user }) {
         return (
             <div>
                 <h2 className="text-2xl font-bold mb-6">Manager Dashboard</h2>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-lg shadow">
                         <h3 className="text-gray-500 text-sm">Team Size</h3>
@@ -60,6 +61,27 @@ function Dashboard({ user }) {
                     <div className="bg-white p-6 rounded-lg shadow">
                         <h3 className="text-gray-500 text-sm">Today's Visits</h3>
                         <p className="text-3xl font-bold text-purple-600">{stats?.today_checkins?.length || 0}</p>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-lg shadow mb-8">
+                        <h3 className="text-lg font-semibold mb-4">Last 7 Days Activity</h3>
+                        <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={stats?.last_week_activity || []}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis
+                                        dataKey="date"
+                                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                    />
+                                    <YAxis allowDecimals={false} />
+                                    <Tooltip
+                                        labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                    />
+                                    <Legend />
+                                    <Bar dataKey="count" name="Check-ins" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
                 </div>
 
@@ -85,11 +107,10 @@ function Dashboard({ user }) {
                                                 {new Date(checkin.checkin_time).toLocaleTimeString()}
                                             </td>
                                             <td className="py-3">
-                                                <span className={`px-2 py-1 rounded text-xs ${
-                                                    checkin.status === 'checked_in' 
-                                                        ? 'bg-green-100 text-green-800' 
-                                                        : 'bg-gray-100 text-gray-800'
-                                                }`}>
+                                                <span className={`px-2 py-1 rounded text-xs ${checkin.status === 'checked_in'
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : 'bg-gray-100 text-gray-800'
+                                                    }`}>
                                                     {checkin.status}
                                                 </span>
                                             </td>
@@ -110,7 +131,7 @@ function Dashboard({ user }) {
     return (
         <div>
             <h2 className="text-2xl font-bold mb-6">My Dashboard</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h3 className="text-gray-500 text-sm">Assigned Clients</h3>

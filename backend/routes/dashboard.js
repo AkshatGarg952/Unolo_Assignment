@@ -39,13 +39,25 @@ router.get('/stats', authenticateToken, requireManager, async (req, res) => {
             [req.user.id]
         );
 
+        // Get last 7 days activity
+        const [lastWeekActivity] = await pool.execute(
+            `SELECT DATE(datetime(ch.checkin_time, '+05:30')) as date, COUNT(*) as count
+             FROM checkins ch
+             INNER JOIN users u ON ch.employee_id = u.id
+             WHERE u.manager_id = ? AND ch.checkin_time >= datetime('now', '-7 days')
+             GROUP BY date
+             ORDER BY date ASC`,
+            [req.user.id]
+        );
+
         res.json({
             success: true,
             data: {
                 team_size: teamMembers.length,
                 team_members: teamMembers,
                 today_checkins: todayCheckins,
-                active_checkins: activeCount[0].count
+                active_checkins: activeCount[0].count,
+                last_week_activity: lastWeekActivity
             }
         });
     } catch (error) {

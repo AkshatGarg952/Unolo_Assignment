@@ -86,6 +86,16 @@ Frontend runs on: `http://localhost:5173`
 
 ### Dashboard
 - `GET /api/dashboard/stats` - Manager stats
+
+  **API Update: Manager Dashboard Visualization**
+
+  To support the new activity chart on the manager dashboard, we have expanded this endpoint to provide historical data.
+
+  | Feature | Previous Response | Current Response |
+  | :--- | :--- | :--- |
+  | **Data Scope** | Current day's summary only. | Current day summary + Last 7 days activity trend. |
+  | **Response Structure** | `team_size`, `active_checkins`, `today_checkins` | Added `last_week_activity` array containing date and check-in counts. |
+  | **Visualization** | Numerical counters and a table. | Numerical counters, table, and a new Bar Chart for weekly trends. |
 - `GET /api/dashboard/employee` - Employee stats
 
 ### Reports
