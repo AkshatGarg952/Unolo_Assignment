@@ -30,6 +30,11 @@ router.post('/', authenticateToken, async (req, res) => {
             return res.status(400).json({ success: false, message: 'Client ID is required' });
         }
 
+        // Strict Location Validation
+        if (!latitude || !longitude) {
+            return res.status(400).json({ success: false, message: 'Location (latitude and longitude) is required' });
+        }
+
         // Check if employee is assigned to this client
         const [assignments] = await pool.execute(
             'SELECT c.* FROM clients c INNER JOIN employee_clients ec ON c.id = ec.client_id WHERE ec.employee_id = ? AND ec.client_id = ?',
@@ -156,6 +161,15 @@ router.put('/checkout', authenticateToken, async (req, res) => {
 router.get('/history', authenticateToken, async (req, res) => {
     try {
         const { start_date, end_date } = req.query;
+
+        // Date Format Validation (YYYY-MM-DD)
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (start_date && !dateRegex.test(start_date)) {
+            return res.status(400).json({ success: false, message: 'Invalid start_date format (YYYY-MM-DD)' });
+        }
+        if (end_date && !dateRegex.test(end_date)) {
+            return res.status(400).json({ success: false, message: 'Invalid end_date format (YYYY-MM-DD)' });
+        }
 
         let query = `
             SELECT ch.*, c.name as client_name, c.address as client_address

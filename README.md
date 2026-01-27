@@ -160,3 +160,30 @@ Frontend runs on: `http://localhost:5173`
 - **Team Stats**: Unique client counts are aggregated using a distinct query to ensure accuracy at the team level (avoiding double-counting if two employees visit the same client).
 - **Timezone**: Consistent with the dashboard, reports use IST (+05:30) for filtering daily records.
 
+## Bonus Implementations (Optional Features)
+
+I have successfully implemented all three optional bonus features:
+
+### 1. Unit Tests for New API Endpoint
+- **Implemented in:** `backend/tests/reports.test.js`
+- **Details:** 
+  - Created a comprehensive test suite using `jest` and `supertest`.
+  - Tests cover success scenarios, data aggregation correctness, date filtering, and error handling for invalid inputs.
+  - Also added `backend/tests/checkin.test.js` to ensure the core check-in flow remains stable with new validations.
+
+### 2. Input Validation with Meaningful Error Messages
+- **Implemented in:** 
+  - `backend/routes/reports.js` (for Daily Summary API)
+  - `backend/routes/checkin.js` (for Check-in and History)
+- **Details:**
+  - **Type Safety:** Enforced `latitude` and `longitude` presence for check-ins to prevent "ghost" data.
+  - **Format Validation:** Strict regex checking for Date formats (`YYYY-MM-DD`) in report and history queries.
+  - **Feedback:** API now returns clear `400 Bad Request` responses with specific error messages (e.g., "Invalid date format. Use YYYY-MM-DD") instead of generic server errors.
+
+### 3. Manager Dashboard Visualization
+- **Implemented in:** `frontend/src/pages/Dashboard.jsx`
+- **Details:** 
+  - Integrated `recharts` library to visualize data.
+  - Added a **"Last 7 Days Activity"** Bar Chart to the Manager Dashboard.
+  - This allows managers to instantly spot check-in trends and team activity levels at a glance.
+
