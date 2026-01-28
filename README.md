@@ -32,6 +32,12 @@ npm run dev
 
 Frontend runs on: `http://localhost:5173`
 
+## Development Timeline
+
+- **Started**: January 24, 2026 (evening)
+- **Completed**: January 27, 2026 (night)
+- **Total Duration**: ~22 hours of active development (across 3 days with a travel break on Jan 25)
+
 ### Test Credentials
 
 | Role     | Email              | Password    |
